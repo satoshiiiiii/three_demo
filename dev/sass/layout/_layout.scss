@@ -1,0 +1,29 @@
+.layout {
+	max-width: 1200px;
+	width: 100%;
+	margin:30px auto;
+	padding:0 20px;
+	*{
+		line-height: 2;
+	}
+	h1,h2,h3,h4,h5,h6{
+		line-height: 2;
+	}
+	h1{
+		font-size: 28px;
+	}
+	h2{
+		font-size: 24px;
+	}
+	h3{
+		font-size: 20px;
+	}
+	ul{
+		list-style: disc;
+		padding-left: 1.8em;
+	}
+}
+
+
+@include breakpoint(sp) {
+}
