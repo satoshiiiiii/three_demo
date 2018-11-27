@@ -108,19 +108,23 @@ const totop = new ToTop('#totop','#global_footer',100,400);
 totop.exec();
 
 
+
 /* ===============================================
-#
+#	three.js demo
 =============================================== */
-function init(){
+//サイズ指定
+const width = 700;
+const height = 400;
 
-	console.log("opk");
-	//サイズ指定
-	const width = 960;
-	const height = 540;
+/* ===============================================
+#	基本1
+=============================================== */
+// window.addEventListener('load',init_1);
 
+function init_1(){
 	//レンダラー作成
 	const renderer = new THREE.WebGLRenderer({
-		canvas:document.querySelector('#myCanvas')
+		canvas:document.querySelector('#myCanvas1')
 	});
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(width,height);
@@ -149,7 +153,69 @@ function init(){
 		renderer.render(scene,camera);	//レンダリング
 	}
 }
+/* ===============================================
+#	基本2	マテリアルを実装
+=============================================== */
+window.addEventListener("load",init_2);
 
+function init_2(){
+	console.log("init_2");
 
-window.addEventListener('load',init);
+	//レンダラー作成
+	const renderer = new THREE.WebGLRenderer({
+		canvas:document.querySelector("#myCanvas2")
+	});
 
+	renderer.setSize(width,height);
+
+	//シーンを作成
+	const scene = new THREE.Scene();
+
+	//カメラを作成
+	const camera = new THREE.PerspectiveCamera(45 , width / height,1,10000);
+	camera.position.set(0,0,+1000);
+
+	//球体を作成
+	const geometry_1 = new THREE.SphereGeometry(300,30,30);
+	const geometry_2 = new THREE.SphereGeometry(300,30,30);
+
+	//マテリアル 単色
+	const material_color = new THREE.MeshStandardMaterial({color:0xFFffff});
+
+	//マテリアル 画像
+	const loader = new THREE.TextureLoader();
+	const texture = loader.load("build/images/earthmap1k.jpg");
+
+	// マテリアルにテクスチャーを設定
+	const material_img = new THREE.MeshStandardMaterial({map:texture});
+
+	//メッシュを作成
+	const mesh_1 = new THREE.Mesh(geometry_1,material_color);
+	const mesh_2 = new THREE.Mesh(geometry_2,material_img);
+
+	//3d空間にメッシュを追加
+	// scene.add(mesh_1);
+	scene.add(mesh_2);
+
+	//平行光源
+	const directionalLight = new THREE.DirectionalLight(0xffffff);
+	directionalLight.position.set(1,1,1);
+
+	//シーンに追加
+	scene.add(directionalLight);
+
+	tick();
+
+	//毎フレーム実行
+	function tick(){
+		//メッシュを回転させる
+		// mesh_1.rotation.y += 0.01;
+		mesh_2.rotation.y += 0.01;
+
+		//レンダリング
+		renderer.render (scene,camera);
+
+		requestAnimationFrame(tick);
+
+	}
+}

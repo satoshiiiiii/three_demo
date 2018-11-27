@@ -6,5 +6,6 @@ block contents
 
 	h2 index
 	ul 
-		li 
-			a(href="demo_01.html") demo1
+		- for (var i= 1;i<=2;i++)
+			li 
+				a(href=`demo_0${i}.html`) demo_0#{i}
