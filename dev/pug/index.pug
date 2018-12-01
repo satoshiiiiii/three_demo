@@ -5,7 +5,11 @@ block contents
 	h1 demo for three.js
 
 	h2 index
-	ul 
-		- for (var i= 1;i<=2;i++)
-			li 
-				a(href=`demo_0${i}.html`) demo_0#{i}
+	ul
+		- for (var i= 1;i<=20;i++)
+
+			li
+				if i < 10
+					a(href=`demo_0${i}.html`) demo_0#{i}
+				else
+					a(href=`demo_${i}.html`) demo_#{i}

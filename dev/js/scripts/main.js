@@ -156,7 +156,7 @@ function init_1(){
 /* ===============================================
 #	基本2	マテリアルを実装
 =============================================== */
-window.addEventListener("load",init_2);
+// window.addEventListener("load",init_2);
 
 function init_2(){
 	console.log("init_2");
@@ -201,6 +201,10 @@ function init_2(){
 	const directionalLight = new THREE.DirectionalLight(0xffffff);
 	directionalLight.position.set(1,1,1);
 
+	//環境光
+	const ambientLight = new THREE.AmbientLight(0x999999);
+	scene.add(ambientLight);
+
 	//シーンに追加
 	scene.add(directionalLight);
 
@@ -218,4 +222,88 @@ function init_2(){
 		requestAnimationFrame(tick);
 
 	}
+}
+
+/* ===============================================
+# 	基本3 様々なジオメトリ
+=============================================== */
+init_3();
+
+function init_3(){
+	//サイズ
+	const 
+		width = 800,
+		height = 800;
+
+	// レンダラー
+	const renderer = new THREE.WebGLRenderer({
+		canvas:document.querySelector("#myCanvas3")
+	});
+	renderer.setSize(width,height);
+
+	//シーン
+	const scene = new THREE.Scene();
+
+	//カメラ
+	const camera = new THREE.PerspectiveCamera(45,width / height,1,10000);
+	camera.position.set(0,500, + 2000);
+	camera.lookAt(new THREE.Vector3(0,0,0));
+
+	//コンテナー
+	const container = new THREE.Object3D();
+	scene.add(container);
+
+	//マテリアル
+	const material = new THREE.MeshStandardMaterial({
+		color:0xff0000,
+		side: THREE.Doubleside
+	});
+
+	// 平行光源
+	const directionalLight = new THREE.DirectionalLight(0xffffff);
+	directionalLight.position.set(1,1,1);
+	scene.add(directionalLight);
+
+	//環境光源
+	const ambientLight = new THREE.AmbientLight(0x999999);
+	scene.add(ambientLight);
+
+	//ジオメトリ
+	const geometryList = [
+		new THREE.SphereGeometry(50),//球体
+		new THREE.BoxGeometry(100,100,100),//直方体
+		new THREE.PlaneGeometry( 100,100),//平面
+		new THREE.TetrahedronGeometry( 100,0 ),//カプセル
+		new THREE.ConeGeometry(100,100,32),//三角錐
+		new THREE.CylinderGeometry( 50,50,100,32),//円柱
+		new THREE.TorusGeometry( 50,30,16,100 )//ドーナツ
+	];
+
+	geometryList.map((geometry,index) => {
+		//ジオメトリとマテリアルからメッシュを作成
+		const mesh = new THREE.Mesh( geometry, material);
+
+		//3D表示インスタンスのsceneプロパティが3d表示空間となる
+		container.add(mesh);
+
+
+		//演習場に配置
+		mesh.position.x = 400 * Math.sin(index / geometryList.length * Math.PI * 2);
+		mesh.position.y = 400 * Math.cos(index / geometryList.length * Math.PI * 2);
+
+	});
+
+	tick();
+
+	//フレーム毎実行イベント
+	function tick(){
+		//メッシュを回転
+		container.rotation.y += 0.01;
+
+		//レンダリング
+		renderer.render(scene,camera);
+
+		requestAnimationFrame(tick);
+	}
+
 }
